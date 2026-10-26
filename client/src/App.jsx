@@ -24,7 +24,10 @@ function Auth({ onToken }) {
   async function submit(e) {
     e.preventDefault();
     try {
-      const { token } = await api(`/${mode}`, null, "POST", { email, password });
+      const { token } = await api(`/${mode}`, null, "POST", {
+        email,
+        password,
+      });
       onToken(token);
     } catch (err) {
       setError(err.message);
@@ -33,12 +36,32 @@ function Auth({ onToken }) {
 
   return (
     <form onSubmit={submit} className="card">
-      <h1>{mode === "login" ? "Log in" : "Register"}</h1>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <h1>{mode === "login" ? "Logg in" : "Register"}</h1>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
       {error && <p className="error">{error}</p>}
-      <button type="submit">{mode === "login" ? "Log in" : "Create account"}</button>
-      <p className="link" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>
+      <button type="submit">
+        {mode === "login" ? "Log in" : "Create account"}
+      </button>
+      <p
+        className="link"
+        onClick={() => {
+          setMode(mode === "login" ? "register" : "login");
+          setError("");
+        }}
+      >
         {mode === "login" ? "No account? Register" : "Have an account? Log in"}
       </p>
     </form>
@@ -75,17 +98,27 @@ function Tasks({ token, onLogout }) {
     <div className="card">
       <div className="row">
         <h1>My Tasks</h1>
-        <button className="ghost" onClick={onLogout}>Log out</button>
+        <button className="ghost" onClick={onLogout}>
+          Log out
+        </button>
       </div>
       <form onSubmit={add} className="row">
-        <input placeholder="New task..." value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input
+          placeholder="New task..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <button type="submit">Add</button>
       </form>
       <ul>
         {tasks.map((t) => (
           <li key={t.id}>
-            <span className={t.done ? "done" : ""} onClick={() => toggle(t.id)}>{t.title}</span>
-            <button className="ghost" onClick={() => remove(t.id)}>✕</button>
+            <span className={t.done ? "done" : ""} onClick={() => toggle(t.id)}>
+              {t.title}
+            </span>
+            <button className="ghost" onClick={() => remove(t.id)}>
+              ✕
+            </button>
           </li>
         ))}
         {tasks.length === 0 && <p className="muted">No tasks yet.</p>}
@@ -103,7 +136,9 @@ export default function App() {
     setToken(t);
   }
 
-  return token
-    ? <Tasks token={token} onLogout={() => saveToken(null)} />
-    : <Auth onToken={saveToken} />;
+  return token ? (
+    <Tasks token={token} onLogout={() => saveToken(null)} />
+  ) : (
+    <Auth onToken={saveToken} />
+  );
 }
